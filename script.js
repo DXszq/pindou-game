@@ -1281,8 +1281,16 @@ function shareDesignImage(design) {
     const blob = dataURLtoBlob(imageData);
     const file = new File([blob], `pindou_${design.name}_${Date.now()}.png`, { type: 'image/png' });
     
-    // 尝试使用Web Share API
-    if (navigator.share && navigator.canShare) {
+    // 检查是否是微信浏览器
+    const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+    
+    if (isWeChat) {
+        // 微信浏览器：提供下载和分享到微信的提示
+        if (confirm('在微信中请先保存图片，然后分享到好友或朋友圈\n\n点击确定保存图片')) {
+            downloadImage(blob, design);
+        }
+    } else if (navigator.share && navigator.canShare) {
+        // 尝试使用Web Share API
         if (navigator.canShare({ files: [file] })) {
             navigator.share({
                 title: `拼豆作品 - ${design.name}`,
@@ -1309,11 +1317,30 @@ function shareDesignImage(design) {
         const a = document.createElement('a');
         a.href = url;
         a.download = `pindou_${design.name}_${Date.now()}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        alert('图片已保存到本地');
+        // 对于移动设备，模拟点击
+        if (navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)) {
+            // 创建一个可见的元素
+            a.style.display = 'block';
+            a.style.position = 'fixed';
+            a.style.top = '0';
+            a.style.left = '-9999px';
+            a.style.width = '1px';
+            a.style.height = '1px';
+            document.body.appendChild(a);
+            // 触发点击
+            a.click();
+            // 延迟移除
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 1000);
+        } else {
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        alert('图片已保存到本地，您可以从相册中分享给微信好友');
     }
 }
 

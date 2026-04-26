@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>拼豆游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 主页 -->
+    <div id="homePage" class="page active">
+        <div class="home-container">
+            <h1>拼豆游戏</h1>
+            <div class="home-buttons">
+                <button id="startButton" class="home-button">开始游戏</button>
+                <button id="collectButton" class="home-button">我的收藏</button>
+                <button id="settingsButton" class="home-button">设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 拼豆板选择页面 -->
+    <div id="boardSelectPage" class="page">
+        <div class="board-select-container">
+            <div class="page-header">
+                <button id="backFromBoardSelectButton" class="back-button">返回</button>
+                <h2>选择拼豆板</h2>
+            </div>
+            <div class="board-selector">
+                <h3>选择形状</h3>
+                <div class="board-shapes">
+                    <button class="shape-option selected" data-shape="square">方形</button>
+                    <button class="shape-option" data-shape="circle">圆形</button>
+                </div>
+                <h3>选择大小</h3>
+                <div class="board-sizes">
+                    <button class="size-option" data-size="10">10×10</button>
+                    <button class="size-option selected" data-size="22">22×22</button>
+                    <button class="size-option" data-size="52">52×52</button>
+                    <button class="size-option" data-size="104">104×104</button>
+                </div>
+                <button id="nextToToolSelectButton" class="next-button">下一步</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏页面 -->
+    <div id="gamePage" class="page">
+        <div class="game-container">
+            <div class="game-header">
+                <button id="backButton" class="back-button">返回</button>
+                <h2>拼豆游戏</h2>
+            </div>
+
+            <!-- 游戏区域 -->
+            <div class="game-board-container">
+                <div class="game-board" id="gameBoard"></div>
+                <div class="three-container" id="threeContainer"></div>
+            </div>
+
+            <!-- 工具栏 -->
+        <div class="tool-bar">
+            <div class="color-picker-header">
+                <h3>选择颜色</h3>
+                <button id="toggleColorPickerButton" class="toggle-button">▼</button>
+            </div>
+            <div class="color-search">
+                <input type="text" id="colorSearchInput" placeholder="搜索颜色...">
+                <select id="colorCategorySelect">
+                    <option value="all">全部</option>
+                    <option value="A">A 黄/橙色</option>
+                    <option value="B">B 绿色</option>
+                    <option value="C">C 蓝色</option>
+                    <option value="D">D 紫色</option>
+                    <option value="E">E 粉色</option>
+                    <option value="F">F 红色</option>
+                    <option value="G">G 棕色</option>
+                    <option value="H">H 黑白灰/肤色/裸色</option>
+                    <option value="M">M 暗色</option>
+                </select>
+            </div>
+            <div class="color-picker" id="colorPicker"></div>
+            <div class="tool-controls">
+                <button id="clearButton" class="control-button">清空</button>
+                <button id="saveButton" class="control-button">保存</button>
+                <button id="ironButton" class="control-button">烫豆</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- 收藏页面 -->
+    <div id="collectPage" class="page">
+        <div class="collect-container">
+            <div class="page-header">
+                <button id="backFromCollectButton" class="back-button">返回</button>
+                <h2>我的收藏</h2>
+            </div>
+            <div class="collect-list" id="collectList">
+                <!-- 收藏列表将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置页面 -->
+    <div id="settingsPage" class="page">
+        <div class="settings-container">
+            <div class="page-header">
+                <button id="backFromSettingsButton" class="back-button">返回</button>
+                <h2>设置</h2>
+            </div>
+            <div class="settings-options">
+                <div class="setting-item">
+                    <label>音效</label>
+                    <input type="checkbox" id="soundCheckbox" checked>
+                </div>
+                <div class="setting-item">
+                    <label>震动</label>
+                    <input type="checkbox" id="vibrationCheckbox" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成品展示页面 -->
+    <div id="resultPage" class="page">
+        <div class="result-container">
+            <div class="page-header">
+                <button id="backFromResultButton" class="back-button">返回</button>
+                <h2>成品展示</h2>
+            </div>
+            <div class="result-content">
+                <div class="result-board" id="resultBoard"></div>
+                <div class="result-actions">
+                    <button id="shareResultButton" class="result-button share">分享</button>
+                    <button id="collectResultButton" class="result-button collect">收藏</button>
+                    <button id="discardResultButton" class="result-button discard">遗弃</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

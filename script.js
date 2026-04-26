@@ -559,32 +559,43 @@ function createGameBoard() {
         gameBoard.style.cursor = 'grab';
     });
     
-    // 触摸拖动支持
+    // 触摸事件处理 - 单指点击放置豆子，两指操作移动和缩放
     gameBoard.addEventListener('touchstart', (e) => {
-        if (e.target === gameBoard || e.target === zoomContainer || e.target === boardContainer) {
+        if (e.touches.length === 1) {
+            // 单指操作 - 准备放置豆子
             isDragging = false;
+        } else if (e.touches.length === 2) {
+            // 两指操作 - 准备缩放和移动
+            isDragging = true;
             startX = e.touches[0].clientX - offsetX;
             startY = e.touches[0].clientY - offsetY;
-            touchStartTime = Date.now();
+            // 计算初始两指距离用于缩放
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            startDistance = Math.sqrt(dx * dx + dy * dy);
+            startScale = scale;
         }
-    });
-
-    // 在zoomContainer上也添加触摸事件支持
-    zoomContainer.addEventListener('touchstart', (e) => {
-        isDragging = false;
-        startX = e.touches[0].clientX - offsetX;
-        startY = e.touches[0].clientY - offsetY;
-        touchStartTime = Date.now();
     });
 
     document.addEventListener('touchmove', (e) => {
-        if (Math.abs(e.touches[0].clientX - startX) > 10 || Math.abs(e.touches[0].clientY - startY) > 10) {
-            isDragging = true;
-        }
-        if (isDragging) {
+        if (e.touches.length === 2 && isDragging) {
+            // 两指操作 - 移动和缩放
             e.preventDefault();
+            
+            // 计算移动
             offsetX = e.touches[0].clientX - startX;
             offsetY = e.touches[0].clientY - startY;
+            
+            // 计算缩放
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const currentDistance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (startDistance > 0) {
+                const scaleFactor = currentDistance / startDistance;
+                scale = Math.max(0.5, Math.min(2, startScale * scaleFactor));
+            }
+            
             updateZoom();
         }
     }, { passive: false });

@@ -561,20 +561,30 @@ function createGameBoard() {
     
     // 触摸拖动支持
     gameBoard.addEventListener('touchstart', (e) => {
-        if (e.target === gameBoard || e.target === zoomContainer) {
+        if (e.target === gameBoard || e.target === zoomContainer || e.target === boardContainer) {
+            e.preventDefault();
             isDragging = true;
             startX = e.touches[0].clientX - offsetX;
             startY = e.touches[0].clientY - offsetY;
         }
-    });
-    
+    }, { passive: false });
+
+    // 在zoomContainer上也添加触摸事件支持
+    zoomContainer.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        startX = e.touches[0].clientX - offsetX;
+        startY = e.touches[0].clientY - offsetY;
+    }, { passive: false });
+
     document.addEventListener('touchmove', (e) => {
         if (isDragging) {
+            e.preventDefault();
             offsetX = e.touches[0].clientX - startX;
             offsetY = e.touches[0].clientY - startY;
             updateZoom();
         }
-    });
+    }, { passive: false });
     
     document.addEventListener('touchend', () => {
         isDragging = false;
